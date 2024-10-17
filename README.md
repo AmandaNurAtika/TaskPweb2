@@ -7,6 +7,20 @@
 5. Terapkan polimorfisme untuk minimal 2 peran sesuai studi kasus
 ## Case Study:
 - NPM 1,2: mahasiswa & nilai
+### Structure Table Mahasiswa:
+- mahasiswa_id int (foreign key)
+- nim varchar(20) not null,
+- nama_mhs varchar(255) not null,
+- alamat varchar(255) not null,
+- email varchar(255) not null,
+- no_telp varchar(20) not null;
+### Structure Table Nilai
+- nilai_id int (foreign key)
+- nilai decimal(10,2) not null,
+- nilai_akhir(10,2) not null,
+- mahasiswa_id(10,2) not null,
+- matkul_id int not null,
+- semester_id int not null;
 # Script Program
 ```
  <!DOCTYPE html>
@@ -673,3 +687,5 @@ Nilai turunan yang ditampilkan meliputi ID Nilai, Nilai Akhir, ID Mahasiswa, ID 
 - Kelas NilaiTurunan merupakan kelas yang diturunkan dari kelas Nilai. menerapkan konsep Polymorphism dengan menampilkan nilai akhir yang diatas kkm (75)
 - Konstruktor kelas ini hanya memerlukan atribut nilai_akhir, bersama dengan ID mahasiswa, ID matakuliah, dan ID semester.
 - Kelas ini juga mengoverride metode tampilkanData() untuk fokus hanya menampilkan nilai akhir dan informasi terkait lainnya.
+2. Koneksi Database dan Query SQL:
+Script menggunakan query SQL untuk menyeleksi nilai akhir dari tabel nilai yang nilainya lebih besar dari 75:

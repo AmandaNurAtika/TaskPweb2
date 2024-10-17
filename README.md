@@ -735,3 +735,9 @@ Menampilkan Data: Jika data nilai ditemukan, ditampilkan dalam tabel HTML dengan
 3. Keamanan Data:
 - Menggunakan htmlspecialchars() untuk menghindari serangan XSS (Cross-Site Scripting) saat menampilkan data di halaman web.
 
+# Output Program
+![Screenshot 2024-10-17 152401](https://github.com/user-attachments/assets/eaf34127-4625-495d-9cd5-51bdf4addca8)
+![Screenshot 2024-10-17 152422](https://github.com/user-attachments/assets/d17cc8ee-c8da-4b69-ba1c-9ec0d5bac26a)
+![Screenshot 2024-10-17 152447](https://github.com/user-attachments/assets/3f70bb49-13bd-4218-887c-7035a0ccc2cd)
+![Screenshot 2024-10-17 152501](https://github.com/user-attachments/assets/8d4390c1-ad3c-4702-9f35-951a1cfe395a)
+

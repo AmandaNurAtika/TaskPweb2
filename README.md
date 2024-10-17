@@ -8,7 +8,7 @@
 ## Case Study:
 - NPM 1,2: mahasiswa & nilai
 ### Structure Table Mahasiswa:
-- mahasiswa_id int (foreign key)
+--- mahasiswa_id int (foreign key)
 - nim varchar(20) not null,
 - nama_mhs varchar(255) not null,
 - alamat varchar(255) not null,

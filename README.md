@@ -235,3 +235,288 @@ Menggunakan HTML, CSS, dan Bootstrap, aplikasi ini menyediakan tampilan yang res
 - Navigasi Tab: Memungkinkan pengguna untuk beralih antara data mahasiswa, data nilai, data mahasiswa turunan, dan data nilai turunan.
 - Desain Menarik: Menggunakan CSS untuk memberikan desain yang menarik dengan gradien warna dan bayangan pada elemen.
 
+# Script Program
+
+            <!-- Data Nilai -->
+            <div class="tab-pane fade" id="nilai" role="tabpanel" aria-labelledby="nilai-tab">
+                <div class="card shadow-lg"> 
+                    <div class="card-header">
+                        <h2 class="mb-0"><i class="bi bi-bar-chart-fill me-2"></i> Data Nilai</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive shadow-sm rounded">
+                            <?php
+
+                            // Query untuk mengambil data nilai dari tabel nilai dan mahasiswa
+                            $sql_nilai = "SELECT n.nilai_id, m.nama_mhs, m.nim, n.nilai, n.nilai_akhir, n.matkul_id, n.semester_id 
+                                          FROM nilai n 
+                                          INNER JOIN mahasiswa m ON n.mahasiswa_id = m.mahasiswa_id";
+                            // Menjalankan query dan menyimpan hasilnya dalam variabel $result_nilai
+                            $result_nilai = $conn->query($sql_nilai);
+
+                            // Memeriksa apakah data nilai ditemukan
+                            if ($result_nilai->num_rows > 0) {
+                                echo '<table class="table table-bordered table-striped table-hover">';
+                                echo '<thead><tr>
+                                            <th>ID Nilai</th>
+                                            <th>NIM</th>
+                                            <th>Nama</th>
+                                            <th>Nilai</th>
+                                            <th>Nilai Akhir</th>
+                                            <th>ID Matkul</th>
+                                            <th>ID Semester</th>
+                                            </tr></thead>';
+                                echo '<tbody>';
+
+                                // Mengambil setiap baris hasil query
+                                while ($row = $result_nilai->fetch_assoc()) {
+                                    // Menampilkan data pada setiap baris tabel dengan fungsi htmlspecialchars untuk keamanan
+                                    echo '<tr>';
+                                    echo '<td>' . htmlspecialchars($row["nilai_id"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["nim"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["nama_mhs"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["nilai"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["nilai_akhir"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["matkul_id"]) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row["semester_id"]) . '</td>';
+                                    echo '</tr>';
+                                }
+                                echo '</tbody></table>';
+                            } else {
+                                // Jika tidak ada data yang ditemukan, tampilkan pesan peringatan
+                                echo '<div class="alert alert-warning" role="alert">Tidak ada data nilai.</div>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+# Deskripsi
+Proyek ini adalah aplikasi berbasis web yang dirancang untuk mengelola dan menampilkan data mahasiswa serta nilai mereka. 
+Dengan menggunakan PHP dan MySQL, aplikasi ini mampu menghubungkan berbagai informasi, termasuk data mahasiswa dan nilai yang diperoleh dalam mata kuliah tertentu.
+
+### Fitur 
+- Menampilkan Data Mahasiswa: Aplikasi ini dapat menampilkan informasi mahasiswa yang tersimpan dalam database.
+- Menampilkan Data Nilai: Mengambil dan menampilkan nilai mahasiswa dari tabel nilai yang terhubung dengan tabel mahasiswa.
+- Desain Responsif: Menggunakan Bootstrap untuk memberikan antarmuka yang responsif dan menarik.
+
+# Script Program
+            <!-- Data Mahasiswa Turunan -->
+            <div class="tab-pane fade" id="mahasiswa-turunan" role="tabpanel" aria-labelledby="mahasiswa-turunan-tab">
+                <div class="card shadow-lg"> <!-- Added shadow-lg for large shadow effect -->
+                    <div class="card-header">
+                        <h2 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i> Data Mahasiswa Turunan</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive shadow-sm rounded"> <!-- Added shadow-sm and rounded for subtle shadow and smooth corners -->
+                            <?php
+                            // Kelas MahasiswaTurunan yang hanya menampilkan data mahasiswa dengan alamat Cilacap
+                            class MahasiswaTurunan extends Mahasiswa
+                            {
+                                // Construct kelas MahasiswaTurunan yang memanggil konstruktor parent (kelas Mahasiswa)
+                                public function __construct($nama, $nim, $alamat, $email, $no_telp)
+                                {
+                                    parent::__construct($nama, $nim, $alamat, $email, $no_telp);
+                                }
+
+                                // Cek apakah alamat mahasiswa adalah Cilacap
+                                public function isFromCilacap()
+                                {
+                                    return strtolower($this->alamat) === 'cilacap';
+                                }
+
+                                // Method untuk menampilkan data mahasiswa dalam format string
+                                public function tampilkanData()
+                                {
+                                    return "Nama: $this->nama, NIM: $this->nim, Alamat: $this->alamat, Email: $this->email, No. Telp: $this->no_telp";
+                                }
+                            }
+
+                            // Query untuk mengambil semua data mahasiswa
+                            $sql_mahasiswa_turunan = "SELECT m.nama_mhs, m.nim, m.alamat, m.email, m.no_telp FROM mahasiswa m";
+                            // Menjalankan query dan menyimpan hasilnya dalam variabel $result_mahasiswa_turunan
+                            $result_mahasiswa_turunan = $conn->query($sql_mahasiswa_turunan);
+
+                            // Memeriksa apakah data mahasiswa ditemukan
+                            if ($result_mahasiswa_turunan->num_rows > 0) {
+                                // Jika data ditemukan, buat tabel HTML dengan header
+                                echo '<table class="table table-bordered table-striped table-hover">';
+                                echo '<thead><tr>
+                                            <th>ID Mahasiswa</th>
+                                            <th>NIM</th>
+                                            <th>Nama</th>
+                                            <th>Alamat</th>
+                                            <th>Email</th>
+                                            <th>No. Telp</th>
+                                            </tr></thead>';
+                                echo '<tbody>';
+
+                                // Mengambil setiap baris data mahasiswa dari hasil query
+                                while ($row = $result_mahasiswa_turunan->fetch_assoc()) {
+                                    // Query untuk mendapatkan ID mahasiswa berdasarkan NIM
+                                    $sql_id = "SELECT mahasiswa_id FROM mahasiswa WHERE nim = '" . $conn->real_escape_string($row["nim"]) . "'";
+                                    $result_id = $conn->query($sql_id);
+                                    $mahasiswa_id = $result_id->num_rows > 0 ? $result_id->fetch_assoc()["mahasiswa_id"] : '-';
+
+                                    // Membuat objek MahasiswaTurunan dengan data yang diambil dari hasil query
+                                    $mahasiswa_turunan = new MahasiswaTurunan(
+                                        $row["nama_mhs"],
+                                        $row["nim"],
+                                        $row["alamat"],
+                                        $row["email"],
+                                        $row["no_telp"]
+                                    );
+
+                                    // Cek apakah alamat mahasiswa adalah "Cilacap"
+                                    if ($mahasiswa_turunan->isFromCilacap()) {
+                                        echo '<tr>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_id ?? '') . '</td>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_turunan->nim ?? '') . '</td>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_turunan->nama ?? '') . '</td>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_turunan->alamat ?? '') . '</td>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_turunan->email ?? '') . '</td>';
+                                        echo '<td>' . htmlspecialchars($mahasiswa_turunan->no_telp ?? '') . '</td>';
+                                        echo '</tr>';
+                                    }
+                                }
+                                echo '</tbody></table>';
+                            } else {
+                                echo '<div class="alert alert-warning" role="alert">Tidak ada data mahasiswa turunan.</div>';
+                            }
+
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+# Deskripsi
+Proyek ini adalah aplikasi berbasis web yang dirancang untuk mengelola dan menampilkan data mahasiswa, termasuk mahasiswa turunan yang berasal dari alamat tertentu. 
+Dengan menggunakan PHP dan MySQL, aplikasi ini mampu menampilkan informasi mahasiswa yang tinggal di cilacap.
+
+### Fitur Utama
+- Menampilkan Data Mahasiswa: Menampilkan semua data mahasiswa yang tersimpan dalam database.
+- Menampilkan Mahasiswa Turunan: Mengambil dan menampilkan mahasiswa yang alamatnya berada di Cilacap.
+- Desain Responsif: Menggunakan Bootstrap untuk memberikan antarmuka yang responsif dan menarik.
+- Keamanan: Menggunakan fungsi htmlspecialchars untuk melindungi aplikasi dari serangan XSS.
+- Penggunaan Kelas dan Pewarisan: Memanfaatkan konsep OOP (Object-Oriented Programming) dengan kelas turunan untuk mengelola mahasiswa turunan.
+
+# Scrip Program
+```
+            <!-- Data Nilai Turunan -->
+            <div class="tab-pane fade" id="nilai-turunan" role="tabpanel" aria-labelledby="nilai-turunan-tab">
+                <div class="card shadow-lg"> 
+                    <div class="card-header">
+                        <h2 class="mb-0"><i class="bi bi-award-fill me-2"></i> Data Nilai Turunan</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive shadow-sm rounded">
+                                            <?php
+                                            // Kelas Nilai
+                                            class Nilai
+                                            {
+                                                // atribut 
+                                                public $nilai_id;
+                                                public $nilai;
+                                                public $nilai_akhir;
+                                                public $mahasiswa_id;
+                                                public $matkul_id;
+                                                public $semester_id;
+
+                                                // Konstruktor untuk menginisialisasi objek Nilai dengan data yang diberikan
+                                                public function __construct($nilai_id, $nilai, $nilai_akhir, $mahasiswa_id, $matkul_id, $semester_id)
+                                                {
+                                                    $this->nilai_id = $nilai_id;
+                                                    $this->nilai = $nilai;
+                                                    $this->nilai_akhir = $nilai_akhir;
+                                                    $this->mahasiswa_id = $mahasiswa_id;
+                                                    $this->matkul_id = $matkul_id;
+                                                    $this->semester_id = $semester_id;
+                                                }
+
+                                                // Method untuk menampilkan data nilai dalam format string
+                                                public function tampilkanData()
+                                                {
+                                                    return "ID Nilai: $this->nilai_id, Nilai: $this->nilai, Nilai Akhir: $this->nilai_akhir, ID Mahasiswa: $this->mahasiswa_id, ID Matkul: $this->matkul_id, ID Semester: $this->semester_id";
+                                                }
+                                            }
+
+
+                                            // Kelas turunan untuk Data Nilai Turunan
+                                            class NilaiTurunan extends Nilai
+                                            {
+                                                public function __construct($nilai_id, $nilai_akhir, $mahasiswa_id, $matkul_id, $semester_id)
+                                                {
+                                                    parent::__construct($nilai_id, null, $nilai_akhir, $mahasiswa_id, $matkul_id, $semester_id); // hanya menurunkan nilai akhir
+                                                }
+
+                                                public function tampilkanData() // Method untuk menampilkan data nilai akhir dalam format string
+                                                {
+                                                    return "ID Nilai: $this->nilai_id, Nilai Akhir: $this->nilai_akhir, ID Mahasiswa: $this->mahasiswa_id, ID Matkul: $this->matkul_id, ID Semester: $this->semester_id";
+                                                }
+                                            }
+
+                                            // Query untuk mengambil data nilai turunan yang nilai akhirnya di atas 75 (KKM)
+                                            $sql_nilai_turunan = "SELECT n.nilai_id, n.nilai_akhir, n.mahasiswa_id, n.matkul_id, n.semester_id FROM nilai n WHERE n.nilai_akhir > 75"; // kondisi untuk nilai akhir > 75
+
+                                            // Menjalankan query dan menyimpan hasilnya ke dalam $result_nilai_turunan
+                                            $result_nilai_turunan = $conn->query($sql_nilai_turunan);
+
+                                            // Mengecek apakah ada data yang memenuhi kondisi nilai akhir > 75
+                                            if ($result_nilai_turunan->num_rows > 0) {
+                                                // Jika ada data, buat tabel HTML dengan header
+                                                echo '<table class="table table-bordered table-striped table-hover">';
+                                                echo '<thead><tr><th>ID Nilai</th><th>Nilai Akhir</th><th>ID Mahasiswa</th><th>ID Matakuliah</th><th>ID Semester</th></tr></thead>';
+                                                echo '<tbody>';
+
+                                                // Looping untuk mengambil setiap baris data hasil query
+                                                while ($row = $result_nilai_turunan->fetch_assoc()) {
+                                                    $nilai_turunan = new NilaiTurunan(
+                                                        $row["nilai_id"],
+                                                        $row["nilai_akhir"],
+                                                        $row["mahasiswa_id"],
+                                                        $row["matkul_id"],
+                                                        $row["semester_id"]
+                                                    );
+
+                                                    // Menampilkan data dalam bentuk baris tabel
+                                                    echo '<tr>';
+                                                    echo '<td>' . htmlspecialchars($nilai_turunan->nilai_id) . '</td>';
+                                                    echo '<td>' . htmlspecialchars($nilai_turunan->nilai_akhir) . '</td>';
+                                                    echo '<td>' . htmlspecialchars($nilai_turunan->mahasiswa_id) . '</td>';
+                                                    echo '<td>' . htmlspecialchars($nilai_turunan->matkul_id) . '</td>';
+                                                    echo '<td>' . htmlspecialchars($nilai_turunan->semester_id) . '</td>';
+                                                    echo '</tr>';
+                                                }
+
+                                                echo '</tbody></table>';
+                                            } else {
+                                                // Jika tidak ada data, tampilkan pesan peringatan bahwa tidak ada nilai di atas KKM
+                                                echo '<div class="alert alert-warning" role="alert">Tidak ada data nilai turunan di atas KKM (75).</div>';
+                                            }
+                                            ?>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+```
+# Deskripsi
+Proyek ini adalah aplikasi berbasis web yang dirancang untuk mengelola dan menampilkan data mahasiswa dan nilai mereka. 
+Aplikasi ini menggunakan PHP dan MySQL untuk menyimpan dan mengelola data. 
+Salah satu fitur utama aplikasi adalah kemampuan untuk menampilkan data nilai turunan, termasuk nilai akhir yang di atas standar kelulusan (KKM).
+
+### Fitur 
+- Menampilkan Data Mahasiswa: Aplikasi ini dapat menampilkan data mahasiswa yang tersimpan dalam database.
+- Menampilkan Data Nilai: Menampilkan semua data nilai mahasiswa, termasuk nilai yang memenuhi kriteria tertentu.
+- Menampilkan Nilai Turunan: Menampilkan nilai akhir mahasiswa yang di atas 75 (KKM) dengan menggunakan kelas turunan.
+- Desain Responsif: Menggunakan Bootstrap untuk memberikan antarmuka yang responsif dan menarik.
+- Keamanan: Menggunakan fungsi htmlspecialchars untuk melindungi aplikasi dari serangan XSS.
+- Penggunaan Kelas dan Pewarisan: Memanfaatkan konsep OOP (Object-Oriented Programming) dengan kelas dan turunan untuk mengelola data nilai.
